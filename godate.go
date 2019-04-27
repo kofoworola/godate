@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-//TODO add timezone support
 type GoDate struct {
 	Time     time.Time
 	TimeZone *time.Location
@@ -139,73 +138,81 @@ func (d GoDate) AbsDifferenceForHumans(compare *GoDate) (string, int) {
 	return strings.Join(sentence, " "), difference
 }
 
-func (date *GoDate) StartOfHour() *GoDate {
-	y, m, d := date.Time.Date()
-	return &GoDate{time.Date(y, m, d, date.Time.Hour(), 0, 0, 0, date.TimeZone), date.TimeZone}
+func (d *GoDate) StartOfHour() *GoDate {
+	y, m, day := d.Time.Date()
+	return &GoDate{time.Date(y, m, day, d.Time.Hour(), 0, 0, 0, d.TimeZone), d.TimeZone}
 }
 
-func (date *GoDate) StartOfDay() *GoDate {
-	y, m, d := date.Time.Date()
-	return &GoDate{time.Date(y, m, d, 0, 0, 0, 0, date.TimeZone),date.TimeZone}
+func (d *GoDate) StartOfDay() *GoDate {
+	y, m, day := d.Time.Date()
+	return &GoDate{time.Date(y, m, day, 0, 0, 0, 0, d.TimeZone), d.TimeZone}
 }
 
-func (date *GoDate) StartOfWeek() *GoDate {
-	day := date.StartOfDay().Time.Weekday()
+func (d *GoDate) StartOfWeek() *GoDate {
+	day := d.StartOfDay().Time.Weekday()
 	if day != FirstDayOfWeek {
-		return date.Sub(int(day-FirstDayOfWeek), DAYS).StartOfDay()
+		return d.Sub(int(day-FirstDayOfWeek), DAYS).StartOfDay()
 	} else{
-		return date.StartOfDay()
+		return d.StartOfDay()
 	}
 }
 
-func (date *GoDate) StartOfMonth() *GoDate {
-	y, m, _ := date.Time.Date()
-	return &GoDate{time.Date(y, m, 1, 0, 0, 0, 0, date.TimeZone),date.TimeZone}
+func (d *GoDate) StartOfMonth() *GoDate {
+	y, m, _ := d.Time.Date()
+	return &GoDate{time.Date(y, m, 1, 0, 0, 0, 0, d.TimeZone), d.TimeZone}
 }
 
-func (date *GoDate) StartOfQuarter() *GoDate {
-	startMonth := date.StartOfMonth()
+func (d *GoDate) StartOfQuarter() *GoDate {
+	startMonth := d.StartOfMonth()
 	off := (startMonth.Time.Month() - 1) % 3
 	return startMonth.Sub(int(off), MONTHS)
 }
 
-func (date *GoDate) StartOfYear() *GoDate {
-	y, _, _ := date.Time.Date()
-	return &GoDate{time.Date(y, 1, 1, 0, 0, 0, 0, date.TimeZone),date.TimeZone}
+func (d *GoDate) StartOfYear() *GoDate {
+	y, _, _ := d.Time.Date()
+	return &GoDate{time.Date(y, 1, 1, 0, 0, 0, 0, d.TimeZone), d.TimeZone}
 }
 
-func (date *GoDate) EndOfHour() *GoDate {
-	nextHour := date.StartOfHour().Add(1, HOURS)
-	return &GoDate{nextHour.Time.Add(-time.Millisecond),date.TimeZone}
+func (d *GoDate) EndOfHour() *GoDate {
+	nextHour := d.StartOfHour().Add(1, HOURS)
+	return &GoDate{nextHour.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
-func (date *GoDate) EndOfDay() *GoDate {
-	nextDay := date.StartOfDay().Add(1, DAYS)
-	return &GoDate{nextDay.Time.Add(-time.Millisecond),date.TimeZone}
+func (d *GoDate) EndOfDay() *GoDate {
+	nextDay := d.StartOfDay().Add(1, DAYS)
+	return &GoDate{nextDay.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
-func (date *GoDate) EndOfWeek() *GoDate {
-	nextWeek := date.StartOfWeek().Add(1, WEEKS)
-	return &GoDate{nextWeek.Time.Add(-time.Millisecond),date.TimeZone}
+func (d *GoDate) EndOfWeek() *GoDate {
+	nextWeek := d.StartOfWeek().Add(1, WEEKS)
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
-func (date *GoDate) EndOfMonth() *GoDate {
-	nextWeek := date.StartOfMonth().Add(1, MONTHS)
-	return &GoDate{nextWeek.Time.Add(-time.Millisecond),date.TimeZone}
+func (d *GoDate) EndOfMonth() *GoDate {
+	nextWeek := d.StartOfMonth().Add(1, MONTHS)
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
-func (date *GoDate) EndOfQuarter() *GoDate {
-	nextWeek := date.StartOfQuarter().Add(3, MONTHS)
-	return &GoDate{nextWeek.Time.Add(-time.Millisecond),date.TimeZone}
+func (d *GoDate) EndOfQuarter() *GoDate {
+	nextWeek := d.StartOfQuarter().Add(3, MONTHS)
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
-func (date *GoDate) EndOfYear() *GoDate {
-	nextWeek := date.StartOfYear().Add(1, MONTHS)
-	return &GoDate{nextWeek.Time.Add(-time.Millisecond),date.TimeZone}
+func (d *GoDate) EndOfYear() *GoDate {
+	nextWeek := d.StartOfYear().Add(1, MONTHS)
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
 //Check if this is the weekend
-func (date *GoDate) IsWeekend() bool {
-	day := date.Time.Weekday()
+func (d *GoDate) IsWeekend() bool {
+	day := d.Time.Weekday()
 	return day == time.Saturday || day == time.Sunday
+}
+
+func (d *GoDate) Format(format string) string{
+	return d.Time.Format(format)
+}
+
+func (d GoDate) String() string{
+	return d.Format("Mon Jan 2 15:04:05 -0700 MST 2006")
 }
