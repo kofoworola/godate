@@ -15,8 +15,12 @@ func TestNow(t *testing.T) {
 
 func TestGoDate_Difference(t *testing.T) {
 	today := Now()
-	yesterday := today.Sub(1, HOURS)
-	if difference := today.Difference(yesterday, HOURS); difference != 1{
+	yesterday := today.Sub(1, DAYS)
+	tomorrow := today.Add(1,DAYS)
+	if difference := today.Difference(yesterday, DAYS); difference != 1{
+		t.Error("Expected 1 got " + strconv.Itoa(difference))
+	}
+	if difference := today.Difference(tomorrow, DAYS); difference != -1{
 		t.Error("Expected 1 got " + strconv.Itoa(difference))
 	}
 	lastWeek := today.Sub(2, WEEKS)
