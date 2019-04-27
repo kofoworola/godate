@@ -7,6 +7,7 @@ var StartOfWeek = time.Monday
 
 //TYPE CONSTANTS
 const (
+	SECONDS = 0x00001
 	MINUTES = 0x00002
 	HOURS   = 0x00003
 	DAYS    = 0x00004
@@ -15,7 +16,17 @@ const (
 	YEARS   = 0x00007
 )
 
-//UNIT CONSTANTS
+var UnitStrings = map[int]string{
+	SECONDS: "seconds",
+	MINUTES: "minutes",
+	HOURS: "hours",
+	DAYS: "days",
+	WEEKS: "weeks",
+	MONTHS: "months",
+	YEARS: "years",
+}
+
+//UNIT Value CONSTANTS
 const(
 	DAY = time.Hour * 24
 	WEEK = DAY * 7
