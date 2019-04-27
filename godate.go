@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
+//TODO add timezone support
 type GoDate struct {
-	StartOfWeek time.Weekday
-	Time        time.Time
+	Time time.Time
 }
 
 //IsBefore checks if the GoDate is before the passed GoDate
@@ -29,7 +29,7 @@ func (d GoDate) Sub(count int, unit int) *GoDate {
 
 //Add adds the 'count' from the GoDate using the unit passed
 func (d GoDate) Add(count int, unit int) *GoDate {
-	milliSecondOffset := time.Millisecond * time.Duration(count/int(math.Abs(float64(count))))
+	//milliSecondOffset := time.Millisecond * time.Duration(count/int(math.Abs(float64(count))))
 	switch unit {
 	case MINUTES:
 		duration := time.Minute
@@ -38,13 +38,13 @@ func (d GoDate) Add(count int, unit int) *GoDate {
 		duration := time.Hour
 		d.Time = d.Time.Add(duration * time.Duration(count))
 	case DAYS:
-		d.Time = d.Time.AddDate(0, 0, count).Add(milliSecondOffset)
+		d.Time = d.Time.AddDate(0, 0, count)
 	case WEEKS:
-		d.Time = d.Time.AddDate(0, 0, 7*count).Add(milliSecondOffset)
+		d.Time = d.Time.AddDate(0, 0, 7*count)
 	case MONTHS:
-		d.Time = d.Time.AddDate(0, count, 0).Add(milliSecondOffset)
+		d.Time = d.Time.AddDate(0, count, 0)
 	case YEARS:
-		d.Time = d.Time.AddDate(count, 0, 0).Add(milliSecondOffset)
+		d.Time = d.Time.AddDate(count, 0, 0)
 	}
 	return &d
 }
@@ -84,8 +84,8 @@ func (d *GoDate) DifferenceAsFloat(compare *GoDate, unit int) float64 {
 //Gets the difference between the relative to the date value in the form of
 //1 month before
 //1 month after
-func (d *GoDate) DifferenceForHumans(compare *GoDate,) string {
-	differenceString,differenceInt := d.AbsDifferenceForHumans(compare)
+func (d *GoDate) DifferenceForHumans(compare *GoDate, ) string {
+	differenceString, differenceInt := d.AbsDifferenceForHumans(compare)
 	if differenceInt > 0 {
 		return differenceString + " before"
 	} else {
@@ -109,21 +109,21 @@ func (d *GoDate) DifferenceFromNowForHumans(unit int) string {
 //Get the abs difference relative to compare time in the form
 //1 month
 //2 days
-func (d *GoDate) AbsDifferenceForHumans(compare *GoDate) (string,int) {
+func (d *GoDate) AbsDifferenceForHumans(compare *GoDate) (string, int) {
 	sentence := make([]string, 2, 2)
 	duration := time.Duration(math.Abs(float64(d.DifferenceAsDuration(compare))))
 	unit := 0
-	if duration > YEAR {
+	if duration >= YEAR {
 		unit = YEARS
-	} else if duration < YEAR && duration > MONTH {
+	} else if duration < YEAR && duration >= MONTH {
 		unit = MONTHS
-	} else if duration < MONTH && duration > WEEK{
+	} else if duration < MONTH && duration >= WEEK {
 		unit = WEEKS
-	} else if duration < WEEK && duration > DAY{
+	} else if duration < WEEK && duration >= DAY {
 		unit = DAYS
-	} else if duration < DAY && duration > time.Hour{
+	} else if duration < DAY && duration >= time.Hour {
 		unit = HOURS
-	} else if duration < time.Hour && duration > time.Minute {
+	} else if duration < time.Hour && duration >= time.Minute {
 		unit = MINUTES
 	} else {
 		unit = SECONDS
@@ -135,5 +135,18 @@ func (d *GoDate) AbsDifferenceForHumans(compare *GoDate) (string,int) {
 	} else {
 		sentence[1] = UnitStrings[unit]
 	}
-	return strings.Join(sentence, " "),difference
+	return strings.Join(sentence, " "), difference
+}
+
+func (date *GoDate) StartOfDay() *GoDate {
+	y, m, d := date.Time.Date()
+	return &GoDate{time.Date(y, m, d, 0, 0, 0, 0, date.Time.Location())}
+}
+
+func (date *GoDate) StartOfWeek() *GoDate{
+	day := date.StartOfDay().Time.Weekday()
+	if day != FirstDayOfWeek{
+		return date.Sub(int(day - FirstDayOfWeek),DAYS)
+	}
+	return nil
 }

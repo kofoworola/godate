@@ -47,7 +47,8 @@ func TestGoDate_DifferenceFromNowForHumans(t *testing.T) {
 		t.Error("got " + difference)
 	}
 	now := Now()
-	nextWeek := now.Add(1,WEEKS)
+	//Add minute for offsetting due to time lag
+	nextWeek := now.Add(1,WEEKS).Add(1,MINUTES)
 	if difference := nextWeek.DifferenceFromNowForHumans(WEEKS); difference != "1 week from now"{
 		t.Error("got " + difference)
 	}
@@ -62,6 +63,21 @@ func TestGoDate_AbsDifferenceForHumans(t *testing.T) {
 	}
 	if difference,_ := today.AbsDifferenceForHumans(tomorrow); difference != "1 week"{
 		t.Error("got " + difference)
+	}
+}
+
+func TestGoDate_StartOfDay(t *testing.T) {
+	today := Now().StartOfDay()
+	if today.Time.Hour() != 0 || today.Time.Second() != 0{
+		t.Error("Got "+ parse(today.Time))
+	}
+}
+
+func TestGoDate_StartOfWeek(t *testing.T) {
+	date := GoDate{time.Date(2019,4,27,0,0,0,0,time.UTC)}
+	FirstDayOfWeek = time.Sunday
+	if date.StartOfWeek().Time.Day() != 21{
+		t.Error("Got " + parse(date.StartOfWeek().Time))
 	}
 }
 

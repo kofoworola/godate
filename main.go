@@ -1,11 +1,13 @@
 package godate
 
-import "time"
+import (
+	"time"
+)
 
-var StartOfWeek = time.Monday
-
+var FirstDayOfWeek = time.Monday
 
 //TYPE CONSTANTS
+//TODO Improve this by using the String method
 const (
 	SECONDS = 0x00001
 	MINUTES = 0x00002
@@ -19,23 +21,23 @@ const (
 var UnitStrings = map[int]string{
 	SECONDS: "seconds",
 	MINUTES: "minutes",
-	HOURS: "hours",
-	DAYS: "days",
-	WEEKS: "weeks",
-	MONTHS: "months",
-	YEARS: "years",
+	HOURS:   "hours",
+	DAYS:    "days",
+	WEEKS:   "weeks",
+	MONTHS:  "months",
+	YEARS:   "years",
 }
 
 //UNIT Value CONSTANTS
-const(
-	DAY = time.Hour * 24
-	WEEK = DAY * 7
+const (
+	DAY   = time.Hour * 24
+	WEEK  = DAY * 7
 	MONTH = DAY * 30
-	YEAR = DAY * 365
+	YEAR  = DAY * 365
 )
 
 func Now() *GoDate {
-	return &GoDate{StartOfWeek, time.Now()}
+	return &GoDate{time.Now()}
 }
 
 func FromString(stringToParse string) *GoDate {
@@ -51,10 +53,10 @@ func FromString(stringToParse string) *GoDate {
 
 func Tomorrow() *GoDate {
 	tomorrow := time.Now().AddDate(0, 0, 1)
-	return &GoDate{StartOfWeek, tomorrow}
+	return &GoDate{tomorrow}
 }
 
 func Yesterday() *GoDate {
 	yesterday := time.Now().AddDate(0, 0, -1)
-	return &GoDate{StartOfWeek, yesterday}
+	return &GoDate{yesterday}
 }
