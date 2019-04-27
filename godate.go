@@ -138,6 +138,16 @@ func (d *GoDate) AbsDifferenceForHumans(compare *GoDate) (string, int) {
 	return strings.Join(sentence, " "), difference
 }
 
+func (date *GoDate) StartOfMinute() *GoDate{
+	y, m, d := date.Time.Date()
+	return &GoDate{time.Date(y, m, d, date.Time.Hour(), date.Time.Minute(), 0, 0, date.Time.Location())}
+}
+
+func (date *GoDate) StartOfHour() *GoDate{
+	y, m, d := date.Time.Date()
+	return &GoDate{time.Date(y, m, d, date.Time.Hour(), 0, 0, 0, date.Time.Location())}
+}
+
 func (date *GoDate) StartOfDay() *GoDate {
 	y, m, d := date.Time.Date()
 	return &GoDate{time.Date(y, m, d, 0, 0, 0, 0, date.Time.Location())}
@@ -149,4 +159,16 @@ func (date *GoDate) StartOfWeek() *GoDate{
 		return date.Sub(int(day - FirstDayOfWeek),DAYS)
 	}
 	return nil
+}
+
+func (date *GoDate) StartOfMonth() *GoDate{
+	y, m, _ := date.Time.Date()
+	return &GoDate{time.Date(y, m, 1, 0, 0, 0, 0, date.Time.Location())}
+}
+
+func (date *GoDate) StartOfQuarter() *GoDate{
+	startMonth := date.StartOfMonth()
+	off := (startMonth.Time.Month() - 1) % 3
+	return startMonth.Sub(int(off),MONTHS)
+	return nil;
 }
