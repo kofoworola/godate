@@ -82,44 +82,34 @@ func (d *GoDate) DifferenceAsFloat(compare *GoDate, unit int) float64 {
 }
 
 //Gets the difference between the relative to the date value in the form of
-//1 month ago
+//1 month before
 //1 month after
-func (d *GoDate) DifferenceForHumans(compare *GoDate, unit int) string {
-	sentence := make([]string, 3, 3)
-	difference := d.Difference(compare, unit)
-	sentence[0] = strconv.Itoa(int(math.Abs(float64(difference))))
-	if difference == 1 || difference == -1 {
-		sentence[1] = strings.TrimSuffix(UnitStrings[unit], "s")
+func (d *GoDate) DifferenceForHumans(compare *GoDate,) string {
+	differenceString,differenceInt := d.AbsDifferenceForHumans(compare)
+	if differenceInt > 0 {
+		return differenceString + " before"
 	} else {
-		sentence[1] = UnitStrings[unit]
+		return differenceString + " after"
 	}
-	if difference > 0 {
-		sentence[2] = "before"
-	} else {
-		sentence[2] = "after"
-	}
-	return strings.Join(sentence, " ")
 }
 
+//Gets the difference between the relative to current time value in the form of
+//1 month ago
+//1 month from now
 func (d *GoDate) DifferenceFromNowForHumans(unit int) string {
 	now := Now()
-	sentence := make([]string, 3, 3)
-	difference := now.Difference(d, unit)
-	sentence[0] = strconv.Itoa(int(math.Abs(float64(difference))))
-	if difference == 1 || difference == -1 {
-		sentence[1] = strings.TrimSuffix(UnitStrings[unit], "s")
+	differenceString, differenceInt := now.AbsDifferenceForHumans(d)
+	if differenceInt > 0 {
+		return differenceString + " ago"
 	} else {
-		sentence[1] = UnitStrings[unit]
+		return differenceString + " from now"
 	}
-	if difference > 0 {
-		sentence[2] = "ago"
-	} else {
-		sentence[2] = "from now"
-	}
-	return strings.Join(sentence, " ")
 }
 
-func (d *GoDate) AbsDifferenceForHumans(compare *GoDate) string {
+//Get the abs difference relative to compare time in the form
+//1 month
+//2 days
+func (d *GoDate) AbsDifferenceForHumans(compare *GoDate) (string,int) {
 	sentence := make([]string, 2, 2)
 	duration := time.Duration(math.Abs(float64(d.DifferenceAsDuration(compare))))
 	unit := 0
@@ -145,5 +135,5 @@ func (d *GoDate) AbsDifferenceForHumans(compare *GoDate) string {
 	} else {
 		sentence[1] = UnitStrings[unit]
 	}
-	return strings.Join(sentence, " ")
+	return strings.Join(sentence, " "),difference
 }

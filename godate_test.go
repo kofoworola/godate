@@ -33,10 +33,10 @@ func TestGoDate_DifferenceForHumans(t *testing.T) {
 	today := Now()
 	yesterday := today.Sub(1, DAYS)
 	tomorrow := today.Add(2,DAYS)
-	if difference := today.DifferenceForHumans(yesterday, DAYS); difference != "1 day before"{
+	if difference := today.DifferenceForHumans(yesterday); difference != "1 day before"{
 		t.Error("got " + difference)
 	}
-	if difference := today.DifferenceForHumans(tomorrow, DAYS); difference != "2 days after"{
+	if difference := today.DifferenceForHumans(tomorrow); difference != "2 days after"{
 		t.Error("got " + difference)
 	}
 }
@@ -57,10 +57,10 @@ func TestGoDate_AbsDifferenceForHumans(t *testing.T) {
 	today := Now()
 	yesterday := today.Sub(1, DAYS)
 	tomorrow := today.Add(7,DAYS)
-	if difference := today.AbsDifferenceForHumans(yesterday); difference != "1 day"{
+	if difference,_ := today.AbsDifferenceForHumans(yesterday); difference != "1 day"{
 		t.Error("got " + difference)
 	}
-	if difference := today.AbsDifferenceForHumans(tomorrow); difference != "1 week"{
+	if difference,_ := today.AbsDifferenceForHumans(tomorrow); difference != "1 week"{
 		t.Error("got " + difference)
 	}
 }
