@@ -138,11 +138,6 @@ func (d *GoDate) AbsDifferenceForHumans(compare *GoDate) (string, int) {
 	return strings.Join(sentence, " "), difference
 }
 
-func (date *GoDate) StartOfMinute() *GoDate{
-	y, m, d := date.Time.Date()
-	return &GoDate{time.Date(y, m, d, date.Time.Hour(), date.Time.Minute(), 0, 0, date.Time.Location())}
-}
-
 func (date *GoDate) StartOfHour() *GoDate{
 	y, m, d := date.Time.Date()
 	return &GoDate{time.Date(y, m, d, date.Time.Hour(), 0, 0, 0, date.Time.Location())}
@@ -156,7 +151,7 @@ func (date *GoDate) StartOfDay() *GoDate {
 func (date *GoDate) StartOfWeek() *GoDate{
 	day := date.StartOfDay().Time.Weekday()
 	if day != FirstDayOfWeek{
-		return date.Sub(int(day - FirstDayOfWeek),DAYS)
+		return date.Sub(int(day - FirstDayOfWeek),DAYS).StartOfDay()
 	}
 	return nil
 }
@@ -171,4 +166,39 @@ func (date *GoDate) StartOfQuarter() *GoDate{
 	off := (startMonth.Time.Month() - 1) % 3
 	return startMonth.Sub(int(off),MONTHS)
 	return nil;
+}
+
+func (date *GoDate) StartOfYear() *GoDate{
+	y, _, _ := date.Time.Date()
+	return &GoDate{time.Date(y, 1, 1, 0, 0, 0, 0, date.Time.Location())}
+}
+
+func (date *GoDate) EndOfHour() *GoDate{
+	nextHour := date.StartOfHour().Add(1,HOURS)
+	return &GoDate{nextHour.Time.Add(-time.Millisecond)}
+}
+
+func (date *GoDate) EndOfDay() *GoDate{
+	nextDay := date.StartOfDay().Add(1,DAYS)
+	return &GoDate{nextDay.Time.Add(-time.Millisecond)}
+}
+
+func (date *GoDate) EndOfWeek() *GoDate {
+	nextWeek := date.StartOfWeek().Add(1,WEEKS)
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond)}
+}
+
+func (date *GoDate) EndOfMonth() *GoDate {
+	nextWeek := date.StartOfMonth().Add(1,MONTHS)
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond)}
+}
+
+func (date *GoDate) EndOfQuarter() *GoDate {
+	nextWeek := date.StartOfQuarter().Add(3,MONTHS)
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond)}
+}
+
+func (date *GoDate) EndOfYear() *GoDate {
+	nextWeek := date.StartOfYear().Add(1,MONTHS)
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond)}
 }
