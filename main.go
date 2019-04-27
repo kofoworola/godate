@@ -40,23 +40,12 @@ func Now() *GoDate {
 	return &GoDate{time.Now()}
 }
 
-func FromString(stringToParse string) *GoDate {
-	switch stringToParse {
-	case "tomorrow":
-		return Tomorrow()
-	case "yesterday":
-		return Yesterday()
-	default:
-		return Now()
-	}
-}
-
 func Tomorrow() *GoDate {
-	tomorrow := time.Now().AddDate(0, 0, 1)
-	return &GoDate{tomorrow}
+	tomorrow := Now().Add(1,DAYS)
+	return tomorrow
 }
 
 func Yesterday() *GoDate {
-	yesterday := time.Now().AddDate(0, 0, -1)
-	return &GoDate{yesterday}
+	yesterday := Now().Sub(1,DAYS)
+	return yesterday
 }
