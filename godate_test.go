@@ -7,14 +7,14 @@ import (
 )
 
 func TestNow(t *testing.T) {
-	now := parse(Now().Time)
-	if now != parse(time.Now()){
-		t.Error("Expected " + parse(time.Now()) + " got "+ now)
+	now := parse(Now(time.UTC).Time)
+	if now != parse(time.Now().In(time.UTC)){
+		t.Error("Expected " + parse(time.Now().In(time.UTC)) + " got "+ now)
 	}
 }
 
 func TestGoDate_Difference(t *testing.T) {
-	today := Now()
+	today := Now(time.UTC)
 	yesterday := today.Sub(1, DAYS)
 	tomorrow := today.Add(1,DAYS)
 	if difference := today.Difference(yesterday, DAYS); difference != 1{
@@ -30,7 +30,7 @@ func TestGoDate_Difference(t *testing.T) {
 }
 
 func TestGoDate_DifferenceForHumans(t *testing.T) {
-	today := Now()
+	today := Now(time.UTC)
 	yesterday := today.Sub(1, DAYS)
 	tomorrow := today.Add(2,DAYS)
 	if difference := today.DifferenceForHumans(yesterday); difference != "1 day before"{
@@ -42,20 +42,20 @@ func TestGoDate_DifferenceForHumans(t *testing.T) {
 }
 
 func TestGoDate_DifferenceFromNowForHumans(t *testing.T) {
-	yesterday := Yesterday()
-	if difference := yesterday.DifferenceFromNowForHumans(DAYS); difference != "1 day ago"{
+	yesterday := Yesterday(time.UTC)
+	if difference := yesterday.DifferenceFromNowForHumans(DAYS,time.UTC); difference != "1 day ago"{
 		t.Error("got " + difference)
 	}
-	now := Now()
+	now := Now(time.UTC)
 	//Add minute for offsetting due to time lag
 	nextWeek := now.Add(1,WEEKS).Add(1,MINUTES)
-	if difference := nextWeek.DifferenceFromNowForHumans(WEEKS); difference != "1 week from now"{
+	if difference := nextWeek.DifferenceFromNowForHumans(WEEKS,time.UTC); difference != "1 week from now"{
 		t.Error("got " + difference)
 	}
 }
 
 func TestGoDate_AbsDifferenceForHumans(t *testing.T) {
-	today := Now()
+	today := Now(time.UTC)
 	yesterday := today.Sub(1, DAYS)
 	tomorrow := today.Add(7,DAYS)
 	if difference,_ := today.AbsDifferenceForHumans(yesterday); difference != "1 day"{
@@ -67,14 +67,14 @@ func TestGoDate_AbsDifferenceForHumans(t *testing.T) {
 }
 
 func TestGoDate_StartOfDay(t *testing.T) {
-	today := Now().StartOfDay()
+	today := Now(time.UTC).StartOfDay()
 	if today.Time.Hour() != 0 || today.Time.Second() != 0{
 		t.Error("Got "+ parse(today.Time))
 	}
 }
 
 func TestGoDate_StartOfWeek(t *testing.T) {
-	date := GoDate{time.Date(2019,4,27,0,0,0,0,time.UTC)}
+	date := GoDate{time.Date(2019,4,27,0,0,0,0,time.UTC),time.UTC}
 	FirstDayOfWeek = time.Sunday
 	if date.StartOfWeek().Time.Day() != 21{
 		t.Error("Got " + parse(date.StartOfWeek().Time))

@@ -9,7 +9,8 @@ import (
 
 //TODO add timezone support
 type GoDate struct {
-	Time time.Time
+	Time     time.Time
+	TimeZone *time.Location
 }
 
 //IsBefore checks if the GoDate is before the passed GoDate
@@ -96,9 +97,9 @@ func (d GoDate) DifferenceForHumans(compare *GoDate, ) string {
 //Gets the difference between the relative to current time value in the form of
 //1 month ago
 //1 month from now
-func (d GoDate) DifferenceFromNowForHumans(unit int) string {
-	now := Now()
-	differenceString, differenceInt := now.AbsDifferenceForHumans(d)
+func (d GoDate) DifferenceFromNowForHumans(unit int,location *time.Location) string {
+	now := Now(location)
+	differenceString, differenceInt := now.AbsDifferenceForHumans(&d)
 	if differenceInt > 0 {
 		return differenceString + " ago"
 	} else {
@@ -140,12 +141,12 @@ func (d GoDate) AbsDifferenceForHumans(compare *GoDate) (string, int) {
 
 func (date *GoDate) StartOfHour() *GoDate {
 	y, m, d := date.Time.Date()
-	return &GoDate{time.Date(y, m, d, date.Time.Hour(), 0, 0, 0, date.Time.Location())}
+	return &GoDate{time.Date(y, m, d, date.Time.Hour(), 0, 0, 0, date.TimeZone), date.TimeZone}
 }
 
 func (date *GoDate) StartOfDay() *GoDate {
 	y, m, d := date.Time.Date()
-	return &GoDate{time.Date(y, m, d, 0, 0, 0, 0, date.Time.Location())}
+	return &GoDate{time.Date(y, m, d, 0, 0, 0, 0, date.TimeZone),date.TimeZone}
 }
 
 func (date *GoDate) StartOfWeek() *GoDate {
@@ -159,7 +160,7 @@ func (date *GoDate) StartOfWeek() *GoDate {
 
 func (date *GoDate) StartOfMonth() *GoDate {
 	y, m, _ := date.Time.Date()
-	return &GoDate{time.Date(y, m, 1, 0, 0, 0, 0, date.Time.Location())}
+	return &GoDate{time.Date(y, m, 1, 0, 0, 0, 0, date.TimeZone),date.TimeZone}
 }
 
 func (date *GoDate) StartOfQuarter() *GoDate {
@@ -170,37 +171,37 @@ func (date *GoDate) StartOfQuarter() *GoDate {
 
 func (date *GoDate) StartOfYear() *GoDate {
 	y, _, _ := date.Time.Date()
-	return &GoDate{time.Date(y, 1, 1, 0, 0, 0, 0, date.Time.Location())}
+	return &GoDate{time.Date(y, 1, 1, 0, 0, 0, 0, date.TimeZone),date.TimeZone}
 }
 
 func (date *GoDate) EndOfHour() *GoDate {
 	nextHour := date.StartOfHour().Add(1, HOURS)
-	return &GoDate{nextHour.Time.Add(-time.Millisecond)}
+	return &GoDate{nextHour.Time.Add(-time.Millisecond),date.TimeZone}
 }
 
 func (date *GoDate) EndOfDay() *GoDate {
 	nextDay := date.StartOfDay().Add(1, DAYS)
-	return &GoDate{nextDay.Time.Add(-time.Millisecond)}
+	return &GoDate{nextDay.Time.Add(-time.Millisecond),date.TimeZone}
 }
 
 func (date *GoDate) EndOfWeek() *GoDate {
 	nextWeek := date.StartOfWeek().Add(1, WEEKS)
-	return &GoDate{nextWeek.Time.Add(-time.Millisecond)}
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond),date.TimeZone}
 }
 
 func (date *GoDate) EndOfMonth() *GoDate {
 	nextWeek := date.StartOfMonth().Add(1, MONTHS)
-	return &GoDate{nextWeek.Time.Add(-time.Millisecond)}
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond),date.TimeZone}
 }
 
 func (date *GoDate) EndOfQuarter() *GoDate {
 	nextWeek := date.StartOfQuarter().Add(3, MONTHS)
-	return &GoDate{nextWeek.Time.Add(-time.Millisecond)}
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond),date.TimeZone}
 }
 
 func (date *GoDate) EndOfYear() *GoDate {
 	nextWeek := date.StartOfYear().Add(1, MONTHS)
-	return &GoDate{nextWeek.Time.Add(-time.Millisecond)}
+	return &GoDate{nextWeek.Time.Add(-time.Millisecond),date.TimeZone}
 }
 
 //Check if this is the weekend

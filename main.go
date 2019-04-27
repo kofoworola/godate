@@ -36,16 +36,16 @@ const (
 	YEAR  = DAY * 365
 )
 
-func Now() *GoDate {
-	return &GoDate{time.Now()}
+func Now(location *time.Location) *GoDate {
+	return &GoDate{time.Now().In(location),location}
 }
 
-func Tomorrow() *GoDate {
-	tomorrow := Now().Add(1,DAYS)
+func Tomorrow(location *time.Location) *GoDate {
+	tomorrow := Now(location).Add(1,DAYS)
 	return tomorrow
 }
 
-func Yesterday() *GoDate {
-	yesterday := Now().Sub(1,DAYS)
+func Yesterday(location *time.Location) *GoDate {
+	yesterday := Now(location).Sub(1,DAYS)
 	return yesterday
 }
