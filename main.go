@@ -36,6 +36,10 @@ const (
 	YEAR  = DAY * 365
 )
 
+func Create(time time.Time) *GoDate{
+	return &GoDate{time,time.Location()}
+}
+
 func Now(location *time.Location) *GoDate {
 	return &GoDate{time.Now().In(location),location}
 }
