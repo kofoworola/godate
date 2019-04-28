@@ -84,7 +84,7 @@ func (d GoDate) DifferenceAsFloat(compare *GoDate, unit int) float64 {
 //Gets the difference between the relative to the date value in the form of
 //1 month before
 //1 month after
-func (d GoDate) DifferenceForHumans(compare *GoDate, ) string {
+func (d GoDate) DifferenceForHumans(compare *GoDate) string {
 	differenceString, differenceInt := d.AbsDifferenceForHumans(compare)
 	if differenceInt > 0 {
 		return differenceString + " before"
