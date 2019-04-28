@@ -87,3 +87,8 @@ fmt.Println(now.EndOfMonth()) //Tue Apr 30 23:59:59 +0000 UTC 2019
 fmt.Println(now.EndOfYear()) //Thu Jan 31 23:59:59 +0000 UTC 2019
 fmt.Println(now.IsWeekend()) //true
 ```
+
+## Contributions
+The aim of this library is to provide a [carbon](https://carbon.nesbot.com/)
+level extension for date manipulation in golang. So PRs aiming to add more functions
+or spot and fix bugs are always welcome
