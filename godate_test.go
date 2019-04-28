@@ -43,13 +43,13 @@ func TestGoDate_DifferenceForHumans(t *testing.T) {
 
 func TestGoDate_DifferenceFromNowForHumans(t *testing.T) {
 	yesterday := Yesterday(time.UTC)
-	if difference := yesterday.DifferenceFromNowForHumans(DAYS,time.UTC); difference != "1 day ago"{
+	if difference := yesterday.DifferenceFromNowForHumans(); difference != "1 day ago"{
 		t.Error("got " + difference)
 	}
 	now := Now(time.UTC)
 	//Add minute for offsetting due to time lag
 	nextWeek := now.Add(1,WEEKS).Add(1,MINUTES)
-	if difference := nextWeek.DifferenceFromNowForHumans(WEEKS,time.UTC); difference != "1 week from now"{
+	if difference := nextWeek.DifferenceFromNowForHumans(); difference != "1 week from now"{
 		t.Error("got " + difference)
 	}
 }

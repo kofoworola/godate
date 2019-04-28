@@ -96,8 +96,8 @@ func (d GoDate) DifferenceForHumans(compare *GoDate, ) string {
 //Gets the difference between the relative to current time value in the form of
 //1 month ago
 //1 month from now
-func (d GoDate) DifferenceFromNowForHumans(location *time.Location) string {
-	now := Now(location)
+func (d GoDate) DifferenceFromNowForHumans() string {
+	now := Now(d.TimeZone)
 	differenceString, differenceInt := now.AbsDifferenceForHumans(&d)
 	if differenceInt > 0 {
 		return differenceString + " ago"
