@@ -88,6 +88,18 @@ fmt.Println(now.EndOfYear()) //Thu Jan 31 23:59:59 +0000 UTC 2019
 fmt.Println(now.IsWeekend()) //true
 ```
 
+### String formatting options
+The string formatting methods are similar to [carbon's string formatting](https://carbon.nesbot.com/docs/#api-formatting)
+```
+timeVal,_ := time.Parse("2006-01-02 3:04PM","2019-04-28 1:04PM")
+now = &godate.GoDate{Time: timeVal, TimeZone: time.UTC}
+fmt.Println(now.ToDateString()) //2019-04-28
+fmt.Println(now.ToTimeString()) //13:04:00
+fmt.Println(now.ToFormattedDateString()) //Apr 28, 2019
+fmt.Println(now.ToDateTimeString()) //2019-04-28 13:04:00
+fmt.Println(now.ToDayTimeString()) //Sun, Apr 28, 2019 01:04 PM
+``` 
+
 ## Contributions
 The aim of this library is to provide a [carbon](https://carbon.nesbot.com/)
 level extension for date manipulation in golang. So PRs aiming to add more functions
