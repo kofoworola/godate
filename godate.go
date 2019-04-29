@@ -203,6 +203,37 @@ func (d *GoDate) EndOfYear() *GoDate {
 	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
+//MidDay gets the midday time usually 12:00 PM of the current day
+func (d *GoDate) MidDay() *GoDate{
+	y, m, day := d.Time.Date()
+	return &GoDate{time.Date(y, m, day, 12, 0, 0, 0, d.TimeZone), d.TimeZone}
+}
+
+//ToDateTimeString Formats and returns the GoDate in the form 2006-01-02 15:04:05
+func (d *GoDate) ToDateTimeString() string{
+	return d.Format("2006-01-02 15:04:05")
+}
+
+//ToDateString Formats and returns the GoDate in the form 2006-01-02
+func (d *GoDate) ToDateString() string{
+	return d.Format("2006-01-02")
+}
+
+//ToFormattedDateString Formats and returns the GoDate in the form Jan 02, 2006
+func (d *GoDate) ToFormattedDateString() string{
+	return d.Format("Jan 02, 2006")
+}
+
+//ToTimeString Formats and returns the GoDate in the form 15:04:05
+func (d *GoDate) ToTimeString() string{
+	return d.Format("15:04:05")
+}
+
+//ToDayTimeString Formats and returns the GoDate in the form Mon, Jan 2, 2006 03:04 PM
+func (d *GoDate) ToDayTimeString() string{
+	return d.Format("Mon, Jan 2, 2006 03:04 PM")
+}
+
 //Check if this is the weekend
 func (d *GoDate) IsWeekend() bool {
 	day := d.Time.Weekday()
