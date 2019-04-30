@@ -73,15 +73,18 @@ time in the same timezone
 ### Helper methods
 Below are the available self explanatory helper methods
 ```
-fmt.Println(now) //Sun Apr 28 07:14:01 +0000 UTC 2019
-fmt.Println(now.StartOfHour()) //Sun Apr 28 07:00:00 +0000 UTC 2019
-fmt.Println(now.StartOfDay()) //Sun Apr 28 00:00:00 +0000 UTC 2019
+now.SetFirstDay(time.Wednesday)
+fmt.Println(now) //Tue Apr 30 15:31:58 +0000 UTC 2019
+fmt.Println(now.StartOfHour()) //Tue Apr 30 15:00:00 +0000 UTC 2019
+fmt.Println(now.StartOfDay()) //Tue Apr 30 00:00:00 +0000 UTC 2019
+fmt.Println(now.StartOfWeek()) //Wed May 1 00:00:00 +0000 UTC 2019
 fmt.Println(now.StartOfQuarter()) //Mon Apr 1 00:00:00 +0000 UTC 2019
 fmt.Println(now.StartOfMonth()) //Mon Apr 1 00:00:00 +0000 UTC 2019
 fmt.Println(now.StartOfYear()) //Tue Jan 1 00:00:00 +0000 UTC 2019
 
-fmt.Println(now.EndOfHour()) //Sun Apr 28 07:59:59 +0000 UTC 2019
-fmt.Println(now.EndOfDay()) //Sun Apr 28 23:59:59 +0000 UTC 2019
+fmt.Println(now.EndOfHour()) //Tue Apr 30 15:59:59 +0000 UTC 2019
+fmt.Println(now.EndOfDay()) //Tue Apr 30 23:59:59 +0000 UTC 2019
+fmt.Println(now.EndOfWeek()) //Tue May 7 23:59:59 +0000 UTC 2019
 fmt.Println(now.EndOfQuarter()) //Sun Jun 30 23:59:59 +0000 UTC 2019
 fmt.Println(now.EndOfMonth()) //Tue Apr 30 23:59:59 +0000 UTC 2019
 fmt.Println(now.EndOfYear()) //Thu Jan 31 23:59:59 +0000 UTC 2019

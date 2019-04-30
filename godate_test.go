@@ -73,16 +73,16 @@ func TestGoDate_StartOfDay(t *testing.T) {
 }
 
 func TestGoDate_StartOfWeek(t *testing.T) {
-	date := GoDate{time.Date(2019,4,27,0,0,0,0,time.UTC),time.UTC}
-	FirstDayOfWeek = time.Sunday
-	if date.StartOfWeek().Time.Day() != 21{
+	date := goDate{time.Date(2019,4,27,0,0,0,0,time.UTC),time.UTC,0}
+	date.SetFirstDay(time.Tuesday)
+	if date.StartOfWeek().Time.Day() != 23{
 		t.Error("Got " + parse(date.StartOfWeek().Time))
 	}
 }
 
 func TestGoDate_ToDateString(t *testing.T) {
 	day,_ := time.Parse("2006-01-02","2019-04-29")
-	dayGoDate := GoDate{day,time.UTC}
+	dayGoDate := goDate{day,time.UTC,0}
 	if dateString := dayGoDate.ToDateString(); dateString != "2019-04-29"{
 		t.Error("Got " + dateString)
 	}
@@ -90,7 +90,7 @@ func TestGoDate_ToDateString(t *testing.T) {
 
 func TestGoDate_ToFormattedDateString(t *testing.T) {
 	day,_ := time.Parse("2006-01-02","2019-04-29")
-	dayGoDate := GoDate{day,time.UTC}
+	dayGoDate := goDate{day,time.UTC,0}
 	if dateString := dayGoDate.ToFormattedDateString(); dateString != "Apr 29, 2019"{
 		t.Error("Got " + dateString)
 	}
@@ -98,7 +98,7 @@ func TestGoDate_ToFormattedDateString(t *testing.T) {
 
 func TestGoDate_ToTimeString(t *testing.T) {
 	day,_ := time.Parse("2006-01-02","2019-04-29")
-	dayGoDate := (&GoDate{day,time.UTC}).StartOfDay()
+	dayGoDate := (&goDate{day,time.UTC,0}).StartOfDay()
 	if timeString := dayGoDate.ToTimeString(); timeString != "00:00:00"{
 		t.Error("Got " + timeString)
 	}
@@ -106,7 +106,7 @@ func TestGoDate_ToTimeString(t *testing.T) {
 
 func TestGoDate_ToDayTimeString(t *testing.T) {
 	day,_ := time.Parse("2006-01-02","2019-04-29")
-	dayGoDate := (&GoDate{day,time.UTC}).MidDay().Add(1,HOUR)
+	dayGoDate := (&goDate{day,time.UTC,0}).MidDay().Add(1,HOUR)
 	if dateString := dayGoDate.ToDayTimeString(); dateString != "Mon, Apr 29, 2019 01:00 PM"{
 		t.Error("Got " + dateString)
 	}
