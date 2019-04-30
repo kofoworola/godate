@@ -49,7 +49,7 @@ func (d GoDate) Difference(compare *GoDate, unit Unit) int {
 //Get the difference as a float
 func (d GoDate) DifferenceAsFloat(compare *GoDate, unit Unit) float64 {
 	duration := d.DifferenceAsDuration(compare)
-	return float64(duration / time.Duration(unit))
+	return float64(duration) / float64(time.Duration(unit))
 }
 
 //Gets the difference between the relative to the date value in the form of

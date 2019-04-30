@@ -26,30 +26,30 @@ Sun Apr 28 17:53:11 +0000 UTC 2019
 ## Methods
 ```
 now := godate.Now(time.UTC)
-now.IsAfter(now.Add(1,godate.DAYS)) //false
-now.IsAfter(now.Sub(1,godate.DAYS)) //true
-now.IsBefore(now.Add(1,godate.DAYS)) //true
-now.IsBefore(now.Sub(1,godate.DAYS)) //false
+now.IsAfter(now.Add(1,godate.DAY)) //false
+now.IsAfter(now.Sub(1,godate.DAY)) //true
+now.IsBefore(now.Add(1,godate.DAY)) //true
+now.IsBefore(now.Sub(1,godate.DAY)) //false
 ```
 
 The `Add()` and `Sub()` methods takes two parameters, the `count` and the
 `unit` to add which is any of the constants
 ```
-SECONDS 
-MINUTES
-HOURS
-DAYS 
-WEEKS
-MONTHS
-YEARS
+SECOND
+MINUTE
+HOUR
+DAY
+WEEK
+MONTH
+YEAR
 ```
 
 
 ### Difference
 ```
 now := godate.Now(time.UTC)
-now.Difference(now.Sub(1,godate.DAYS),godate.DAYS) //1 
-now.Difference(now.Add(7,godate.DAYS),godate.WEEKS) //-1
+now.Difference(now.Sub(1,godate.DAY),godate.DAY) //1 
+now.Difference(now.Add(7,godate.DAY),godate.WEEK) //-1
 ```
 
 The `Difference()` method returns the difference of the passed `godate`
