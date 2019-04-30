@@ -4,8 +4,6 @@ import (
 	"time"
 )
 
-var FirstDayOfWeek = time.Monday
-
 type Unit time.Duration
 
 //UNIT CONSTANTS
