@@ -23,29 +23,13 @@ func (d *GoDate) IsAfter(compare *GoDate) bool {
 }
 
 //Sub subtracts the 'count' from the GoDate using the unit passed
-func (d GoDate) Sub(count int, unit int) *GoDate {
+func (d GoDate) Sub(count int, unit Unit) *GoDate {
 	return d.Add(-count, unit)
 }
 
 //Add adds the 'count' from the GoDate using the unit passed
-func (d GoDate) Add(count int, unit int) *GoDate {
-	//milliSecondOffset := time.Millisecond * time.Duration(count/int(math.Abs(float64(count))))
-	switch unit {
-	case MINUTES:
-		duration := time.Minute
-		d.Time = d.Time.Add(duration * time.Duration(count))
-	case HOURS:
-		duration := time.Hour
-		d.Time = d.Time.Add(duration * time.Duration(count))
-	case DAYS:
-		d.Time = d.Time.AddDate(0, 0, count)
-	case WEEKS:
-		d.Time = d.Time.AddDate(0, 0, 7*count)
-	case MONTHS:
-		d.Time = d.Time.AddDate(0, count, 0)
-	case YEARS:
-		d.Time = d.Time.AddDate(count, 0, 0)
-	}
+func (d GoDate) Add(count int, unit Unit) *GoDate {
+	d.Time = d.Time.Add(time.Duration(unit * Unit(count)))
 	return &d
 }
 
@@ -57,28 +41,15 @@ func (d *GoDate) DifferenceAsDuration(compare *GoDate) time.Duration {
 //Difference Returns the difference between the Godate and another in the specified unit
 //If the difference is negative then the 'compare' date occurs after the date
 //Else it occurs before the the date
-func (d GoDate) Difference(compare *GoDate, unit int) int {
+func (d GoDate) Difference(compare *GoDate, unit Unit) int {
 	difference := d.DifferenceAsFloat(compare, unit)
 	return int(difference)
 }
 
 //Get the difference as a float
-func (d GoDate) DifferenceAsFloat(compare *GoDate, unit int) float64 {
+func (d GoDate) DifferenceAsFloat(compare *GoDate, unit Unit) float64 {
 	duration := d.DifferenceAsDuration(compare)
-	switch unit {
-	case MINUTES:
-		return duration.Minutes()
-	case HOURS:
-		return duration.Hours()
-	case DAYS:
-		return float64(duration / DAY)
-	case WEEKS:
-		return float64(duration / WEEK)
-	case MONTHS:
-		return float64(duration / MONTH)
-	default:
-		return float64(duration.Hours() / 24)
-	}
+	return float64(duration / time.Duration(unit))
 }
 
 //Gets the difference between the relative to the date value in the form of
@@ -111,29 +82,28 @@ func (d GoDate) DifferenceFromNowForHumans() string {
 //2 days
 func (d GoDate) AbsDifferenceForHumans(compare *GoDate) (string, int) {
 	sentence := make([]string, 2, 2)
-	duration := time.Duration(math.Abs(float64(d.DifferenceAsDuration(compare))))
-	unit := 0
+	duration := Unit(math.Abs(float64(d.DifferenceAsDuration(compare))))
+	var unit Unit
 	if duration >= YEAR {
-		unit = YEARS
+		unit = YEAR
 	} else if duration < YEAR && duration >= MONTH {
-		unit = MONTHS
+		unit = MONTH
 	} else if duration < MONTH && duration >= WEEK {
-		unit = WEEKS
+		unit = WEEK
 	} else if duration < WEEK && duration >= DAY {
-		unit = DAYS
-	} else if duration < DAY && duration >= time.Hour {
-		unit = HOURS
-	} else if duration < time.Hour && duration >= time.Minute {
-		unit = MINUTES
+		unit = DAY
+	} else if duration < DAY && duration >= HOUR {
+		unit = HOUR
+	} else if duration < HOUR && duration >= MINUTE {
+		unit = MINUTE
 	} else {
-		unit = SECONDS
+		unit = SECOND
 	}
 	difference := d.Difference(compare, unit)
 	sentence[0] = strconv.Itoa(int(math.Abs(float64(difference))))
+	sentence[1] = string(unit)
 	if difference == 1 || difference == -1 {
-		sentence[1] = strings.TrimSuffix(UnitStrings[unit], "s")
-	} else {
-		sentence[1] = UnitStrings[unit]
+		sentence[1] = strings.TrimSuffix(sentence[1], "s")
 	}
 	return strings.Join(sentence, " "), difference
 }
@@ -151,7 +121,7 @@ func (d *GoDate) StartOfDay() *GoDate {
 func (d *GoDate) StartOfWeek() *GoDate {
 	day := d.StartOfDay().Time.Weekday()
 	if day != FirstDayOfWeek {
-		return d.Sub(int(day-FirstDayOfWeek), DAYS).StartOfDay()
+		return d.Sub(int(day-FirstDayOfWeek), DAY).StartOfDay()
 	} else{
 		return d.StartOfDay()
 	}
@@ -165,7 +135,7 @@ func (d *GoDate) StartOfMonth() *GoDate {
 func (d *GoDate) StartOfQuarter() *GoDate {
 	startMonth := d.StartOfMonth()
 	off := (startMonth.Time.Month() - 1) % 3
-	return startMonth.Sub(int(off), MONTHS)
+	return startMonth.Sub(int(off), MONTH)
 }
 
 func (d *GoDate) StartOfYear() *GoDate {
@@ -174,32 +144,32 @@ func (d *GoDate) StartOfYear() *GoDate {
 }
 
 func (d *GoDate) EndOfHour() *GoDate {
-	nextHour := d.StartOfHour().Add(1, HOURS)
+	nextHour := d.StartOfHour().Add(1, HOUR)
 	return &GoDate{nextHour.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
 func (d *GoDate) EndOfDay() *GoDate {
-	nextDay := d.StartOfDay().Add(1, DAYS)
+	nextDay := d.StartOfDay().Add(1, DAY)
 	return &GoDate{nextDay.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
 func (d *GoDate) EndOfWeek() *GoDate {
-	nextWeek := d.StartOfWeek().Add(1, WEEKS)
+	nextWeek := d.StartOfWeek().Add(1, WEEK)
 	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
 func (d *GoDate) EndOfMonth() *GoDate {
-	nextWeek := d.StartOfMonth().Add(1, MONTHS)
+	nextWeek := d.StartOfMonth().Add(1, MONTH)
 	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
 func (d *GoDate) EndOfQuarter() *GoDate {
-	nextWeek := d.StartOfQuarter().Add(3, MONTHS)
+	nextWeek := d.StartOfQuarter().Add(3, MONTH)
 	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
 func (d *GoDate) EndOfYear() *GoDate {
-	nextWeek := d.StartOfYear().Add(1, MONTHS)
+	nextWeek := d.StartOfYear().Add(1, MONTH)
 	return &GoDate{nextWeek.Time.Add(-time.Millisecond), d.TimeZone}
 }
 
