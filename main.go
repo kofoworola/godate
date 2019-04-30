@@ -33,20 +33,20 @@ func (u Unit) String() string{
 	return UnitStrings[u]
 }
 
-func Create(time time.Time) *GoDate{
-	return &GoDate{time,time.Location()}
+func Create(time time.Time) *goDate {
+	return &goDate{time,time.Location(),0}
 }
 
-func Now(location *time.Location) *GoDate {
-	return &GoDate{time.Now().In(location),location}
+func Now(location *time.Location) *goDate {
+	return &goDate{time.Now().In(location),location,0}
 }
 
-func Tomorrow(location *time.Location) *GoDate {
+func Tomorrow(location *time.Location) *goDate {
 	tomorrow := Now(location).Add(1,DAY)
 	return tomorrow
 }
 
-func Yesterday(location *time.Location) *GoDate {
+func Yesterday(location *time.Location) *goDate {
 	yesterday := Now(location).Sub(1,DAY)
 	return yesterday
 }
