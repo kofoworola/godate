@@ -101,7 +101,7 @@ func (d GoDate) AbsDifferenceForHumans(compare *GoDate) (string, int) {
 	}
 	difference := d.Difference(compare, unit)
 	sentence[0] = strconv.Itoa(int(math.Abs(float64(difference))))
-	sentence[1] = string(unit)
+	sentence[1] = unit.String()
 	if difference == 1 || difference == -1 {
 		sentence[1] = strings.TrimSuffix(sentence[1], "s")
 	}

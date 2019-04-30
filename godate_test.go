@@ -15,24 +15,24 @@ func TestNow(t *testing.T) {
 
 func TestGoDate_Difference(t *testing.T) {
 	today := Now(time.UTC)
-	yesterday := today.Sub(1, DAYS)
-	tomorrow := today.Add(1,DAYS)
-	if difference := today.Difference(yesterday, DAYS); difference != 1{
+	yesterday := today.Sub(1, DAY)
+	tomorrow := today.Add(1,DAY)
+	if difference := today.Difference(yesterday, DAY); difference != 1{
 		t.Error("Expected 1 got " + strconv.Itoa(difference))
 	}
-	if difference := today.Difference(tomorrow, DAYS); difference != -1{
+	if difference := today.Difference(tomorrow, DAY); difference != -1{
 		t.Error("Expected -1 got " + strconv.Itoa(difference))
 	}
-	lastWeek := today.Sub(2, WEEKS)
-	if difference := today.Difference(lastWeek, MONTHS); difference != 0{
+	lastWeek := today.Sub(2, WEEK)
+	if difference := today.Difference(lastWeek, MONTH); difference != 0{
 		t.Error("Expected 0 got " + strconv.Itoa(difference))
 	}
 }
 
 func TestGoDate_DifferenceForHumans(t *testing.T) {
 	today := Now(time.UTC)
-	yesterday := today.Sub(1, DAYS)
-	tomorrow := today.Add(2,DAYS)
+	yesterday := today.Sub(1, DAY)
+	tomorrow := today.Add(2,DAY)
 	if difference := today.DifferenceForHumans(yesterday); difference != "1 day before"{
 		t.Error("got " + difference)
 	}
@@ -47,8 +47,7 @@ func TestGoDate_DifferenceFromNowForHumans(t *testing.T) {
 		t.Error("got " + difference)
 	}
 	now := Now(time.UTC)
-	//Add minute for offsetting due to time lag
-	nextWeek := now.Add(1,WEEKS).Add(1,MINUTES)
+	nextWeek := now.Add(1,WEEK).Add(1,Unit(time.Millisecond))
 	if difference := nextWeek.DifferenceFromNowForHumans(); difference != "1 week from now"{
 		t.Error("got " + difference)
 	}
@@ -56,8 +55,8 @@ func TestGoDate_DifferenceFromNowForHumans(t *testing.T) {
 
 func TestGoDate_AbsDifferenceForHumans(t *testing.T) {
 	today := Now(time.UTC)
-	yesterday := today.Sub(1, DAYS)
-	tomorrow := today.Add(7,DAYS)
+	yesterday := today.Sub(1, DAY)
+	tomorrow := today.Add(7,DAY)
 	if difference,_ := today.AbsDifferenceForHumans(yesterday); difference != "1 day"{
 		t.Error("got " + difference)
 	}
@@ -107,7 +106,7 @@ func TestGoDate_ToTimeString(t *testing.T) {
 
 func TestGoDate_ToDayTimeString(t *testing.T) {
 	day,_ := time.Parse("2006-01-02","2019-04-29")
-	dayGoDate := (&GoDate{day,time.UTC}).MidDay().Add(1,HOURS)
+	dayGoDate := (&GoDate{day,time.UTC}).MidDay().Add(1,HOUR)
 	if dateString := dayGoDate.ToDayTimeString(); dateString != "Mon, Apr 29, 2019 01:00 PM"{
 		t.Error("Got " + dateString)
 	}

@@ -42,11 +42,11 @@ func Now(location *time.Location) *GoDate {
 }
 
 func Tomorrow(location *time.Location) *GoDate {
-	tomorrow := Now(location).Add(1,DAYS)
+	tomorrow := Now(location).Add(1,DAY)
 	return tomorrow
 }
 
 func Yesterday(location *time.Location) *GoDate {
-	yesterday := Now(location).Sub(1,DAYS)
+	yesterday := Now(location).Sub(1,DAY)
 	return yesterday
 }
