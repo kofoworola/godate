@@ -59,9 +59,9 @@ in the specified `unit` (the second parameter).
 
 ### Difference for humans
 ```
-fmt.Println(now.DifferenceForHumans(now.Add(1,godate.WEEKS))) //1 week after
-fmt.Println(now.Add(8,godate.DAYS).DifferenceFromNowForHumans()) //1 week from 
-fmt.Println(now.Sub(21,godate.DAYS).DifferenceFromNowForHumans()) //3 weeks ago
+fmt.Println(now.DifferenceForHumans(now.Add(1,godate.WEEK))) //1 week after
+fmt.Println(now.Add(8,godate.DAY).DifferenceFromNowForHumans()) //1 week from 
+fmt.Println(now.Sub(21,godate.DAY).DifferenceFromNowForHumans()) //3 weeks ago
 ```
 The `DifferenceForHumans` methods works similar to the corresponding
 [carbon method](https://carbon.nesbot.com/docs/#api-humandiff)
