@@ -2,39 +2,52 @@ package godate
 
 import "time"
 
+//Year sets the year of the godate variable
 func (d *goDate) Year(year int) *goDate{
 	old := d.Time
 	d.Time = time.Date(year,old.Month(),old.Day(),old.Hour(),old.Minute(),old.Second(),old.Nanosecond(),d.TimeZone)
 	return d
 }
 
-func (d *goDate) Moth(month int){
+//Month sets the month of the year of the godate variable
+func (d *goDate) Month(month int) *goDate{
 	old := d.Time
 	d.Time = time.Date(old.Year(), time.Month(month),old.Day(),old.Hour(),old.Minute(),old.Second(),old.Nanosecond(),d.TimeZone)
+	return d
 }
 
-func (d *goDate) Day(day int){
+//Day sets the day of the week of the godate variable
+func (d *goDate) Day(day int) *goDate{
 	old := d.Time
 	d.Time = time.Date(old.Year(), old.Month(),day,old.Hour(),old.Minute(),old.Second(),old.Nanosecond(),d.TimeZone)
+	return d
 }
 
-func (d *goDate) Hour(hour int){
+//Hour sets the hour of the godate variable. Range of 0-59
+func (d *goDate) Hour(hour int) *goDate{
 	old := d.Time
 	d.Time = time.Date(old.Year(), old.Month(),old.Day(),hour,old.Minute(),old.Second(),old.Nanosecond(),d.TimeZone)
+	return d
 }
 
-func (d *goDate) Minute(minute int){
+//Minute sets the minute of the godate variable
+func (d *goDate) Minute(minute int) *goDate{
 	old := d.Time
 	d.Time = time.Date(old.Year(), old.Month(),old.Day(),old.Hour(),minute,old.Second(),old.Nanosecond(),d.TimeZone)
+	return d
 }
 
-func (d *goDate) Second(second int){
+//Second sets the second of the godate variable
+func (d *goDate) Second(second int) *goDate{
 	old := d.Time
 	d.Time = time.Date(old.Year(), old.Month(),old.Day(),old.Hour(),old.Minute(),second,old.Nanosecond(),d.TimeZone)
+	return d
 }
 
-func (d *goDate) Nanosecond(nanosecond int){
+//Second sets the current nanosecond of the godate variable
+func (d *goDate) Nanosecond(nanosecond int) *goDate{
 	old := d.Time
 	d.Time = time.Date(old.Year(), old.Month(),old.Day(),old.Hour(),old.Minute(),old.Second(),nanosecond,d.TimeZone)
+	return d
 }
 
