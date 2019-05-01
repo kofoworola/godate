@@ -48,3 +48,11 @@ func Yesterday(location *time.Location) *goDate {
 	yesterday := Now(location).Sub(1,DAY)
 	return yesterday
 }
+
+func Parse(layout, value string) (*goDate,error){
+	parsedTime, err := time.Parse(layout,value)
+	if err != nil{
+		return nil, err
+	}
+	return &goDate{Time: parsedTime, TimeZone: parsedTime.Location()},nil
+}
