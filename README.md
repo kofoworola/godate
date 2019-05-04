@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/kofoworola/godate.svg?branch=master)](https://travis-ci.org/kofoworola/godate)
 
 # GODATE
-Godate is a date toolkit for golang for easy date manupulation highly inspired by php's carbon [Carbon](https://carbon.nesbot.com/)
+Godate is a date toolkit for golang for easy date manipulation highly inspired by php's carbon [Carbon](https://carbon.nesbot.com/)
 # Installation
 ```
 go get github.com/kofoworola/godate
